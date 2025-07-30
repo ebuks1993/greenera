@@ -36,7 +36,7 @@ DEBUG = False
 ALLOWED_HOSTS = ["*"]
 
 
-CSRF_TRUSTED_ORIGINS =["greenera-production.up.railway.app"]
+CSRF_TRUSTED_ORIGINS =["https://*.greenera-production.up.railway.app"]
 
 # Application definition
 
