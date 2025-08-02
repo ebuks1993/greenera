@@ -53,10 +53,12 @@ class AppcallSerializer (serializers.ModelSerializer):
         ## put the data in a model format for django to understand 
         repsdata=[rep(salesman_id=item['salesman_id'],salesman_name=item['salesman_name']) for item in zico1]
 
+        unique_objs = {obj.salesman_id: obj for obj in repsdata}.values()
+
         ## pass in the bulk data to the database and if it already exist , update it 
         with transaction.atomic():
             rep.objects.bulk_create(
-                repsdata,
+                unique_objs,
                 update_conflicts=True,
                 unique_fields=['salesman_id'],
                 update_fields=['salesman_name']
@@ -83,11 +85,13 @@ class AppcallSerializer (serializers.ModelSerializer):
         ## put the extracted customer  data in a model format for django to understand 
         custdata=[customer(cust_code=item['cust_code'],name=item['name'],cust_location=item['cust_location'],cust_latitude=item['cust_latitude'],
                       cust_longitude=item['cust_longitude'],channel=item['cust_channel'],rep_id=item['rep']) for item in wico1]
+        
+        unique_objs1 = {obj.cust_code: obj for obj in custdata}.values()
 
         ## pass in the bulk data to the database and if it already exist , update it 
         with transaction.atomic():
             customer.objects.bulk_create(
-                custdata,
+                unique_objs1,
                 update_conflicts=True,
                 unique_fields=['cust_code'],
                 update_fields=['name','cust_location','cust_latitude','cust_longitude','channel','rep_id']
@@ -112,11 +116,11 @@ class AppcallSerializer (serializers.ModelSerializer):
                        visit_date=item['visit_date'],createdate=item['createdate'],activity_product=item['activity_product'],
                         activity_comment=item['activity_description'] )  for item in vico]
 
-
+        unique_objs2 = {obj.a_code: obj for obj in visitdata}.values()
         ## pass in the bulk data to the database and if it already exist , update it 
         with transaction.atomic():
             Visit.objects.bulk_create(
-                visitdata,
+                unique_objs2,
                 update_conflicts=True,
                 unique_fields=['a_code'],
                 update_fields=['contactname','latitude','longitude','customer_id','rep_id','rank_desc','distance','joint_work_descn',

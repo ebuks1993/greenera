@@ -26,7 +26,7 @@ class visitView(ModelViewSet):
         'rep__areaManager',
         'rep__areaManager__businessManager',
         'rep__areaManager__businessManager__regionManager'
-    )
+    ).all()
     serializer_class=visitSerializer
 
 
