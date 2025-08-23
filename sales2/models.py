@@ -70,8 +70,10 @@ class SalesRecords(models.Model):
     rate = models.IntegerField()
     Amount = models.IntegerField()
     temp_region = models.CharField( max_length=500)
-    customer = models.ForeignKey(Customer, on_delete=models.DO_NOTHING, related_name='customers')
-    product = models.ForeignKey(Product, on_delete=models.DO_NOTHING,related_name="products")
+    # customer = models.ForeignKey(Customer, on_delete=models.DO_NOTHING, related_name='customers')
+    # product = models.ForeignKey(Product, on_delete=models.DO_NOTHING,related_name="products")
+    customer = models.CharField(max_length=500)
+    product = models.CharField(max_length=500)
     temp_margin = models.DecimalField(max_digits=5, decimal_places=2,null=True)
     temp_margin2 = models.FloatField(null=True)
 
