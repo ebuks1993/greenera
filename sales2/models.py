@@ -63,7 +63,8 @@ class Product(models.Model):
 
 class SalesRecords(models.Model):
     VoucherNum = models.CharField(max_length=50,)
-    Date = models.DateField( auto_now=False, auto_now_add=False)
+    # Date = models.DateField( auto_now=False, auto_now_add=False)
+    Date = models.CharField(max_length=500)
     units = models.IntegerField()
     ctns = models.IntegerField()
     rate = models.IntegerField()

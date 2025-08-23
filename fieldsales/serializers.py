@@ -56,7 +56,6 @@ class AppcallSerializer (serializers.ModelSerializer):
         repsdata=[rep(salesman_id=item['salesman_id'],salesman_name=item['salesman_name']) for item in zico1]
 
         unique_objs = {obj.salesman_id: obj for obj in repsdata}.values()
-
         
 
         ## pass in the bulk data to the database and if it already exist , update it 
