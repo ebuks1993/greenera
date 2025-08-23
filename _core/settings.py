@@ -31,7 +31,7 @@ SECRET_KEY=os.environ.get('SECRET_KEY')
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
 
@@ -126,27 +126,28 @@ WSGI_APPLICATION = '_core.wsgi.application'
 
 import dj_database_url
 
-if DEBUG == True:
-    DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME':'green5db',
-        'USER':'postgres',
-        'PASSWORD': 'chuk1993',
-        'PORT':'5433'
-    }}
-
+# if DEBUG == True:
 #     DATABASES = {
 #     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
-else:
-    DATABASES = {
-    "default": dj_database_url.config(default=os.environ.get("DATABASE_URL"))
-}
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME':'green5db',
+#         'USER':'postgres',
+#         'PASSWORD': 'chuk1993',
+#         'PORT':'5433'
+#     }}
 
+# #     DATABASES = {
+# #     'default': {
+# #         'ENGINE': 'django.db.backends.sqlite3',
+# #         'NAME': BASE_DIR / 'db.sqlite3',
+# #     }
+# # }
+# else:
+#     DATABASES = {
+#     "default": dj_database_url.config(default=os.environ.get("DATABASE_URL"))
+# }
+DATABASES = {
+    "default": dj_database_url.config(default=os.environ.get("DATABASE_URL"))}
 
 
 
