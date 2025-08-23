@@ -32,13 +32,14 @@ class salesAdmin(admin.ModelAdmin):
 
         # open the file
         file = obj.file
-        # file.open("r")  # ensure it's open
+        file.open("rb")  # ensure it's open
         record=pd.read_excel(file)
+        file.close
         recordz=record.fillna(0)
 
         ## get the columns that are important 
         record2=recordz[['Voucher Number','Date','Party Name','Party Alias','Item Name','Acutal Quantity','Alternate Actual Quantity','Unit','Purchase Rate','Amount','Purchase/Sales Ledger',"Margin"]]
-        record2['Date'] = pd.to_datetime(record2['Date'], dayfirst=True).dt.date
+        record2['Date'] = pd.to_datetime(record2['Date'], dayfirst=True,errors="coerce").dt.date
         # record2['qpc']=recordz['Acutal Quantity']/recordz['Alternate Actual Quantity']
         
 
@@ -47,7 +48,8 @@ class salesAdmin(admin.ModelAdmin):
 ## ________________________________GET THE SALES RECORDS______________________________________
 
         # susto=record2.groupby(['Item Name','Unit'])[['qpc']].max().reset_index()
-        prodsdata=[SalesRecords(VoucherNum=item['Voucher Number'],Date=item['Date'],units=item['Acutal Quantity'],ctns=item['Alternate Actual Quantity'],
+        prodsdata=[SalesRecords(VoucherNum=item['Voucher Number'],Date=item['Date'],
+                                units=item['Acutal Quantity'],ctns=item['Alternate Actual Quantity'],
                            rate=item['Purchase Rate'],Amount=item['Amount'],temp_region=item['Purchase/Sales Ledger'],customer_id=item['Party Alias'],
                            product_id =item['Item Name'],temp_margin2=item['Margin'],temp_margin=0.00000) for item in record2.to_dict(orient="records")]
 
