@@ -75,7 +75,7 @@ class salesAdmin(admin.ModelAdmin):
 
         # unique_objs2 = {obj.VoucherNum: obj for obj in prodsdata}.values()
         unique_objs2 = {
-            (obj.VoucherNum, obj.product_id): obj for obj in prodsdata
+            (obj.VoucherNum, obj.product): obj for obj in prodsdata
         }.values()
 
 
