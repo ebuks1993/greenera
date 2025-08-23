@@ -32,7 +32,7 @@ class areaManager(models.Model):
 class rep(models.Model):
     salesman_name= models.CharField( max_length=500)
     salesman_id = models.CharField( max_length=50, unique=True , primary_key=True)
-    areaManager = models.ForeignKey(areaManager, on_delete=models.DO_NOTHING , null=True , blank=True)
+    areaManager = models.ForeignKey(areaManager, on_delete=models.DO_NOTHING , null=True , blank=True , related_name="areamgrs")
 
     def __str__(self):
         return self.salesman_name
@@ -51,7 +51,7 @@ class customer(models.Model):
     cust_state = models.CharField(max_length=500,null=True,blank=True)
     cust_channels = models.ForeignKey(customerCat, on_delete=models.DO_NOTHING,null=True,blank=True)
     channel = models.CharField(max_length=500,null=True)
-    rep = models.ForeignKey(rep, on_delete=models.DO_NOTHING)
+    rep = models.ForeignKey(rep, on_delete=models.DO_NOTHING , related_name="reps")
 
 
 
@@ -74,7 +74,7 @@ class Visit(models.Model):
     distance = models.CharField( max_length=500,null=True)
     joint_work_descn = models.CharField( max_length=500,null=True)
     customer = models.ForeignKey(customer, on_delete=models.DO_NOTHING,null=True)
-    rep = models.ForeignKey(rep, on_delete=models.DO_NOTHING,null=True)
+    rep = models.ForeignKey(rep, on_delete=models.DO_NOTHING,null=True, related_name='repss')
 
 
 

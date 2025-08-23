@@ -49,21 +49,38 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'whitenoise.runserver_nostatic',
     'rest_framework',
-    'fieldsales'
+    'corsheaders',
+    'fieldsales',
+    'sales',
+    'sales2',
+     'django_cleanup.apps.CleanupConfig'
+
+     
 ]
 
 MIDDLEWARE = [
+    
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     "whitenoise.middleware.WhiteNoiseMiddleware",
-    # 'querycount.middleware.QueryCountMiddleware' 
+    # 'querycount.middleware.QueryCountMiddleware' ,
+
     
 ]
+
+# CORS_ALLOWED_ORIGINS=["http://localhost:3001",]
+# # CORS_ALLOW_ALL_ORIGINS: True 
+# CORS_ALLOW_CREDENTIALS = True
+
+# CSRF_TRUSTED_ORIGINS = ["http://*.localhost:5173/"]
+
+
 
 ROOT_URLCONF = '_core.urls'
 
@@ -113,7 +130,7 @@ if DEBUG == True:
     DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME':'greendb',
+        'NAME':'green5db',
         'USER':'postgres',
         'PASSWORD': 'chuk1993',
         'PORT':'5433'
@@ -182,6 +199,11 @@ USE_TZ = True
 STATIC_URL = 'static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATICFILES_STORAGE="whitenoise.storage.CompressedManifestStaticFilesStorage"
+
+
+MEDIA_ROOT = BASE_DIR / 'images'
+MEDIA_URL='/images/'
+
 
 
 # Default primary key field type

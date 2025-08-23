@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from django.db import transaction
-from .models import Appcall , rep,customer,Visit , Appcall, Failcalls
+from django.db.models import Count
+from .models import Appcall , rep,customer,Visit , Appcall, Failcalls,areaManager
 import requests
 
 from datetime import date , timedelta
@@ -17,6 +18,7 @@ class AppcallSerializer (serializers.ModelSerializer):
 
         ## GET THE DATE
         today=date.today()
+        three_days_back = today - timedelta(days=3)
 
 
 
@@ -54,6 +56,8 @@ class AppcallSerializer (serializers.ModelSerializer):
         repsdata=[rep(salesman_id=item['salesman_id'],salesman_name=item['salesman_name']) for item in zico1]
 
         unique_objs = {obj.salesman_id: obj for obj in repsdata}.values()
+
+        
 
         ## pass in the bulk data to the database and if it already exist , update it 
         with transaction.atomic():
@@ -137,11 +141,13 @@ class AppcallSerializer (serializers.ModelSerializer):
         pass
 
 
-class RepSerializer(serializers.ModelSerializer):
-    class Meta:
-        model=rep
-        fields='__all__'
 
+
+class MgrSerializer(serializers.ModelSerializer):
+    # reps=RepSerializer(many=True, source='areamgrs')
+    class Meta:
+        model=areaManager
+        fields='__all__'
 
 class customerSerializer(serializers.ModelSerializer):
     class Meta:
@@ -196,9 +202,61 @@ class visitSerializer(serializers.ModelSerializer):
             c=visit.rep.areaManager.businessManager.regionManager.email
         
         return f"{a},{b},{c}"
-    
 
 
+class visitcountSerializer(serializers.ModelSerializer):
+    # vio=serializers.IntegerField(read_only=True)
+    total=serializers.IntegerField(read_only=True)
+    class Meta:
+        model=Visit
+        fields=['visit_date','distance','customer','total']
+
+class RepVisitSerializer(serializers.ModelSerializer):
+    visit= serializers.IntegerField(read_only=True)
+    date= serializers.DateField(read_only=True)
+    # vio=visitcountSerializer(many=True,source='repss')
+    class Meta:
+        model=rep
+        fields=['salesman_id','salesman_name','areaManager','visit','date']
+
+
+# class HmdRepVisitSerializer(serializers.ModelSerializer):
+#     visit= serializers.IntegerField(read_only=True)
+#     date= serializers.DateField(read_only=True)
+#     asm= serializers.SerializerMethodField(method_name='asmname')
+#     # vio=visitcountSerializer(many=True,source='repss')
+#     class Meta:
+#         model=rep
+#         fields=['salesman_id','salesman_name','areaManager','visit','date','asm']
+
+#     def asmname(self,rep:rep):
+#         a=rep.areaManager.name
+#         if a is None:
+#             return ""
+#         else:
+#             return rep.areaManager.name
+
+class HmdRepVisitSerializer(serializers.ModelSerializer):
+    areaManager=serializers.StringRelatedField()
+    visit=serializers.SerializerMethodField()
+    # vio=visitcountSerializer(many=True,source='repss')
+    class Meta:
+        model=rep
+        fields=['salesman_id','salesman_name','areaManager','visit']
+
+    def get_visit(self,obj):
+        # visits= obj.repss.all()
+        vis= obj.repss.filter(distance__lte=0.5)
+        visits=vis.values("visit_date").annotate(total=Count("customer")).order_by("-visit_date")# --- groupby visitdate 
+        return visitcountSerializer(visits,many=True).data
+
+
+
+class RepSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model=rep
+        fields='__all__'
 
 
 # --- in the event of a failed upload 
