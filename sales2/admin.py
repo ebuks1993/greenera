@@ -58,7 +58,8 @@ class salesAdmin(admin.ModelAdmin):
         ## get the columns that are important 
         record2=recordz[['Voucher Number','Date','Party Name','Party Alias','Item Name','Acutal Quantity','Alternate Actual Quantity','Unit','Purchase Rate','Amount','Purchase/Sales Ledger',"Margin"]]
         # record2['Date'] = pd.to_datetime(record2['Date'], dayfirst=True,errors="coerce").apply(lambda x: x.date() if pd.notnull(x) else None)
-        record2['Date']= pd.to_datetime( record2['Date'],dayfirst=True,errors="coerce").dt.strftime("%Y-%m-%d")
+        record2['Date']= record2['Date'].astype('str')
+
 
         # record2['qpc']=recordz['Acutal Quantity']/recordz['Alternate Actual Quantity']
         
