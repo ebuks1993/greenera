@@ -37,20 +37,28 @@ class salesAdmin(admin.ModelAdmin):
         record=pd.read_excel(file)
         file.close
         recordz=record.fillna(0)
-        def clean_date(val):
+        def parse_date(val):
             try:
                 if pd.isna(val):
                     return None
-                if isinstance(val, (datetime, date)):
-                    return val.date() if isinstance(val, datetime) else val
-                return pd.to_datetime(str(val), dayfirst=True, errors="coerce").date()
+                if isinstance(val, datetime):   # already datetime
+                    return val.date()
+                if isinstance(val, (int, float)):  # Excel serial
+                    return pd.to_datetime(val, origin="1899-12-30", unit="D").date()
+                # try dd-mm-yyyy
+                return datetime.strptime(str(val), "%d-%m-%Y").date()
             except Exception:
-                return None
+                try:
+                    # fallback: let pandas try any format
+                    return pd.to_datetime(val, errors="coerce").date()
+                except Exception:
+                    return None
+
 
         ## get the columns that are important 
         record2=recordz[['Voucher Number','Date','Party Name','Party Alias','Item Name','Acutal Quantity','Alternate Actual Quantity','Unit','Purchase Rate','Amount','Purchase/Sales Ledger',"Margin"]]
         # record2['Date'] = pd.to_datetime(record2['Date'], dayfirst=True,errors="coerce").apply(lambda x: x.date() if pd.notnull(x) else None)
-        record2['Date']= (pd.to_datetime(record2['Date'], format="%d-%m-%Y", errors="coerce").dt.date)
+        record2['Date']= record2['Date'].apply(parse_date)
 
         # record2['qpc']=recordz['Acutal Quantity']/recordz['Alternate Actual Quantity']
         
