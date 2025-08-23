@@ -70,7 +70,7 @@ class salesAdmin(admin.ModelAdmin):
 ## ________________________________GET THE SALES RECORDS______________________________________
 
         # susto=record2.groupby(['Item Name','Unit'])[['qpc']].max().reset_index()
-        prodsdata=[SalesRecords(VoucherNum=item['Voucher Number'],Date=item['Date'],
+        prodsdata=[SalesRecords(VoucherNum=item['Voucher Number'],Date=None,
                                 units=item['Acutal Quantity'],ctns=item['Alternate Actual Quantity'],
                            rate=item['Purchase Rate'],Amount=item['Amount'],temp_region=item['Purchase/Sales Ledger'],customer=item['Party Alias'],
                            product =item['Item Name'],temp_margin2=item['Margin'],temp_margin=0.00000) for item in record2.to_dict(orient="records")]
