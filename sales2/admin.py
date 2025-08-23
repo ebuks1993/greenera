@@ -39,7 +39,7 @@ class salesAdmin(admin.ModelAdmin):
         ## get the columns that are important 
         record2=recordz[['Voucher Number','Date','Party Name','Party Alias','Item Name','Acutal Quantity','Alternate Actual Quantity','Unit','Purchase Rate','Amount','Purchase/Sales Ledger',"Margin"]]
         record2['Date'] = pd.to_datetime(record2['Date'], dayfirst=True).dt.date
-        record2['qpc']=recordz['Acutal Quantity']/recordz['Alternate Actual Quantity']
+        # record2['qpc']=recordz['Acutal Quantity']/recordz['Alternate Actual Quantity']
         
 
 
