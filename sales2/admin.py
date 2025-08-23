@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.db import transaction
 import pandas as pd
 from datetime import datetime
+import datetime as dt
 
 from .models import sales,Customer,Product,SalesRecords,capacityUpload,capacity,Accounts,AccountsUpload
 
@@ -36,10 +37,21 @@ class salesAdmin(admin.ModelAdmin):
         record=pd.read_excel(file)
         file.close
         recordz=record.fillna(0)
+        def clean_date(val):
+            try:
+                if pd.isna(val):
+                    return None
+                if isinstance(val, (datetime, date)):
+                    return val.date() if isinstance(val, datetime) else val
+                return pd.to_datetime(str(val), dayfirst=True, errors="coerce").date()
+            except Exception:
+                return None
 
         ## get the columns that are important 
         record2=recordz[['Voucher Number','Date','Party Name','Party Alias','Item Name','Acutal Quantity','Alternate Actual Quantity','Unit','Purchase Rate','Amount','Purchase/Sales Ledger',"Margin"]]
-        record2['Date'] = pd.to_datetime(record2['Date'], dayfirst=True,errors="coerce").apply(lambda x: x.date() if pd.notnull(x) else None)
+        # record2['Date'] = pd.to_datetime(record2['Date'], dayfirst=True,errors="coerce").apply(lambda x: x.date() if pd.notnull(x) else None)
+        record2['Date']= (pd.to_datetime(record2['Date'], format="%d-%m-%Y", errors="coerce").datetime.date)
+
         # record2['qpc']=recordz['Acutal Quantity']/recordz['Alternate Actual Quantity']
         
 
