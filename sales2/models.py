@@ -82,6 +82,26 @@ class SalesRecords(models.Model):
             models.UniqueConstraint(fields=['VoucherNum','product'],name="vouchervsproduct")
         ]
 
+
+class SalesRecords2(models.Model):
+    VoucherNum = models.CharField(max_length=50,)
+    Date = models.CharField(max_length=500,null=True)
+    units = models.IntegerField()
+    ctns = models.IntegerField()
+    rate = models.IntegerField()
+    Amount = models.IntegerField()
+    temp_region = models.CharField( max_length=500)
+    customer = models.CharField(max_length=500)
+    product = models.CharField(max_length=500)
+    temp_margin = models.DecimalField(max_digits=5, decimal_places=2,null=True)
+    temp_margin2 = models.FloatField(null=True)
+
+    class Meta:
+        constraints=[
+            models.UniqueConstraint(fields=['VoucherNum','product'],name="vouchervsproduct2")
+        ]
+
+
 # __________________________________________CAPACITY ________________________________________________
 
 

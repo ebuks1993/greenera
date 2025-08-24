@@ -4,7 +4,7 @@ import pandas as pd
 from datetime import datetime
 import datetime as dt
 
-from .models import sales,Customer,Product,SalesRecords,capacityUpload,capacity,Accounts,AccountsUpload
+from .models import sales,Customer,Product,SalesRecords,capacityUpload,capacity,Accounts,AccountsUpload,SalesRecords2
 
 # class salesinline(admin.StackedInline):
 #         model=SalesRecords
@@ -57,9 +57,9 @@ class salesAdmin(admin.ModelAdmin):
 
         ## get the columns that are important 
         record2=recordz[['Voucher Number','Date','Party Name','Party Alias','Item Name','Acutal Quantity','Alternate Actual Quantity','Unit','Purchase Rate','Amount','Purchase/Sales Ledger',"Margin"]]
-        record2['Date']= record2['Date'].apply(parse_date)
+        # record2['Date']= record2['Date'].astype('str')
         # record2['Date'] = pd.to_datetime(record2['Date'], dayfirst=True,errors="coerce").apply(lambda x: x.date() if pd.notnull(x) else None)
-        record2['Date']= record2['Date'].astype('str')
+        # record2['Date']= record2['Date'].astype('str')
 
 
         # record2['qpc']=recordz['Acutal Quantity']/recordz['Alternate Actual Quantity']
@@ -70,7 +70,7 @@ class salesAdmin(admin.ModelAdmin):
 ## ________________________________GET THE SALES RECORDS______________________________________
 
         # susto=record2.groupby(['Item Name','Unit'])[['qpc']].max().reset_index()
-        prodsdata=[SalesRecords(VoucherNum=item['Voucher Number'],Date=None,
+        prodsdata=[SalesRecords2(VoucherNum=item['Voucher Number'],Date=item['Date'],
                                 units=item['Acutal Quantity'],ctns=item['Alternate Actual Quantity'],
                            rate=item['Purchase Rate'],Amount=item['Amount'],temp_region=item['Purchase/Sales Ledger'],customer=item['Party Alias'],
                            product =item['Item Name'],temp_margin2=item['Margin'],temp_margin=0.00000) for item in record2.to_dict(orient="records")]
@@ -82,7 +82,7 @@ class salesAdmin(admin.ModelAdmin):
 
 
         with transaction.atomic():
-            SalesRecords.objects.bulk_create(
+            SalesRecords2.objects.bulk_create(
                 unique_objs2,
                 update_conflicts=True,
                 unique_fields=['VoucherNum','product'],
@@ -96,7 +96,7 @@ class salesAdmin(admin.ModelAdmin):
 
 
 
-@admin.register(SalesRecords)
+@admin.register(SalesRecords2)
 class ProductAdmin(admin.ModelAdmin):
     list_display=['id','VoucherNum','Date','units','ctns','rate','Amount','temp_region','customer','product','temp_margin']
 # Register your models here.
