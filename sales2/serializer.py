@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from django.db import transaction
 from django.db.models import Count
-from .models import Accounts,capacity,sales , SalesRecords,AccountsUpload,capacityUpload
+from .models import Accounts,capacity,sales , SalesRecords2,AccountsUpload,capacityUpload
 import requests
 
 
@@ -25,7 +25,7 @@ class salesSerializer (serializers.ModelSerializer):
 
 class SalesRecordsSerializer (serializers.ModelSerializer):
     class Meta:
-        model=SalesRecords
+        model=SalesRecords2
         fields='__all__'
 
 class AccountsUploadSerializer (serializers.ModelSerializer):

@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from rest_framework.viewsets import ModelViewSet
-from .models import Accounts,AccountsUpload,capacity,capacityUpload,SalesRecords,sales
+from .models import Accounts,AccountsUpload,capacity,capacityUpload,SalesRecords2,sales
 from .serializer import AccountsSerializer,AccountsUploadSerializer,capacitySerializer,capacityUploadSerializer,SalesRecordsSerializer,salesSerializer
 # from django.db.models import Value,F
 # from django.db.models import Count, Sum, F, Window, Avg, Max, Min 
@@ -26,7 +26,7 @@ class capacityUploadView(ModelViewSet):
     serializer_class=capacityUploadSerializer
 
 class SalesRecordsView(ModelViewSet):
-    queryset=SalesRecords.objects.all()
+    queryset=SalesRecords2.objects.all()
     serializer_class=SalesRecordsSerializer
 
 class salesView(ModelViewSet):
