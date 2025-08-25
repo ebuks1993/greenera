@@ -23,7 +23,7 @@ class capacitySerializer (serializers.ModelSerializer):
     # cred_cap = serializers.SerializerMethodField()
     class Meta:
         model=capacity
-        fields=['id','Name','Sales','collection','Balance','credit_cap']
+        fields=['id','Name','Sales','collection','Balance','credit_cap','Allias']
 
     # def get_cred_cap(self, obj):
     #     return getattr(obj, "cred_cap", None)
