@@ -1,5 +1,9 @@
 from django.shortcuts import render
 from rest_framework.viewsets import ModelViewSet
+
+from django.db.models.functions import Coalesce
+from django.db.models import OuterRef, Subquery, Value, IntegerField
+
 from .models import Accounts,AccountsUpload,capacity,capacityUpload,SalesRecords2,sales
 from .serializer import AccountsSerializer,AccountsUploadSerializer,capacitySerializer,capacityUploadSerializer,SalesRecordsSerializer,salesSerializer
 # from django.db.models import Value,F
@@ -17,7 +21,18 @@ class AccountsUploadView(ModelViewSet):
     serializer_class=AccountsUploadSerializer
 
 class capacityView(ModelViewSet):
-    queryset=capacity.objects.all()
+    # queryset=capacity.objects.all()
+    def get_queryset(self):
+        cred_lim=Accounts.objects.filter(Allias=OuterRef('Allias')).values("Credit_limit")[:1]
+        # cur_sales=SalesRecords2.objects.filter(Allias=OuterRef('Allias'),month='8',year='2025')
+        return capacity.objects.annotate(
+            credit_cap=Coalesce(
+                Subquery(cred_lim, output_field=IntegerField()),  # 👈 fix here
+                Value(0),
+                output_field=IntegerField()
+            )
+        )
+        
     serializer_class=capacitySerializer
 
 

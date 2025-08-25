@@ -76,6 +76,8 @@ class SalesRecords(models.Model):
     product = models.CharField(max_length=500)
     temp_margin = models.DecimalField(max_digits=5, decimal_places=2,null=True)
     temp_margin2 = models.FloatField(null=True)
+    month = models.CharField(max_length=50  , null=True)
+    year = models.CharField( max_length=50 , null=True)
 
     class Meta:
         constraints=[
@@ -95,6 +97,9 @@ class SalesRecords2(models.Model):
     product = models.CharField(max_length=500)
     temp_margin = models.DecimalField(max_digits=5, decimal_places=2,null=True)
     temp_margin2 = models.FloatField(null=True)
+    month = models.CharField(max_length=50  , null=True)
+    year = models.CharField( max_length=50 , null=True)
+    company = models.CharField( max_length=500 , null =True)
 
     class Meta:
         constraints=[
@@ -125,6 +130,7 @@ class capacity (models.Model):
     Sales = models.FloatField()
     collection = models.FloatField()
     Balance = models.FloatField()
+    Allias = models.CharField(max_length=1000,null=True)
     # company = models.CharField( max_length=500, choices=company,null=True)
 
 #____________________________________ACOOUNTS_____________________________________________

@@ -60,12 +60,15 @@ class salesAdmin(admin.ModelAdmin):
         # record2['Date']= record2['Date'].astype('str')
         # record2['Date'] = pd.to_datetime(record2['Date'], dayfirst=True,errors="coerce").apply(lambda x: x.date() if pd.notnull(x) else None)
         # record2['Date']= record2['Date'].astype('str')
+        record2['month']= pd.DatetimeIndex(record2["Date"]).month 
+        record2['year']= pd.DatetimeIndex(record2["Date"]).year
+
 
 
         # record2['qpc']=recordz['Acutal Quantity']/recordz['Alternate Actual Quantity']
         
 
-
+  
 
 ## ________________________________GET THE SALES RECORDS______________________________________
 
@@ -73,7 +76,7 @@ class salesAdmin(admin.ModelAdmin):
         prodsdata=[SalesRecords2(VoucherNum=item['Voucher Number'],Date=item['Date'],
                                 units=item['Acutal Quantity'],ctns=item['Alternate Actual Quantity'],
                            rate=item['Purchase Rate'],Amount=item['Amount'],temp_region=item['Purchase/Sales Ledger'],customer=item['Party Name'],
-                           product =item['Item Name'],temp_margin2=item['Margin'],temp_margin=0.00000) for item in record2.to_dict(orient="records")]
+                           product =item['Item Name'],temp_margin2=item['Margin'],month=item['month'],year=item['year'], company=obj.company,temp_margin=0.00000) for item in record2.to_dict(orient="records")]
 
         # unique_objs2 = {obj.VoucherNum: obj for obj in prodsdata}.values()
         unique_objs2 = {
@@ -86,7 +89,7 @@ class salesAdmin(admin.ModelAdmin):
                 unique_objs2,
                 update_conflicts=True,
                 unique_fields=['VoucherNum','product'],
-                update_fields=['Date','units','ctns','rate','Amount','temp_region','customer','temp_margin2'])
+                update_fields=['Date','units','ctns','rate','Amount','temp_region','customer','temp_margin2','month','year','company'])
     
 
         # final write 
@@ -98,7 +101,7 @@ class salesAdmin(admin.ModelAdmin):
 
 @admin.register(SalesRecords2)
 class ProductAdmin(admin.ModelAdmin):
-    list_display=['id','VoucherNum','Date','units','ctns','rate','Amount','temp_region','customer','product','temp_margin']
+    list_display=['id','VoucherNum','Date','units','ctns','rate','Amount','temp_region','customer','product','temp_margin','month','year','company']
 # Register your models here.
 
 
@@ -119,12 +122,13 @@ class CapacityUploadAdmin(admin.ModelAdmin):
         nrecordz=nrecord.fillna(0)
         
         nrecordz.columns=['Name','Sales','collection','balance']
-        print(nrecordz.columns)
+        nrecordz['Allias']=nrecordz['Name'].str[:5]
+        # print(nrecordz.columns)
         # recordz['id']=recordz['name'].str[:5]
 
         
 
-        fulldata=[capacity(Name=item['Name'],Sales=item['Sales'],collection=item['collection'],Balance=item['balance'],
+        fulldata=[capacity(Name=item['Name'],Sales=item['Sales'],collection=item['collection'],Balance=item['balance'],Allias=item['Allias']
                                ) for item in nrecordz.to_dict(orient="records")]
 
         # unique_objs2 = {obj.VoucherNum: obj for obj in prodsdata}.values()
@@ -149,7 +153,7 @@ class CapacityUploadAdmin(admin.ModelAdmin):
 
 @admin.register(capacity)
 class capacityAdmin(admin.ModelAdmin):
-     list_display=['Name','Sales','collection','Balance']
+     list_display=['Name','Sales','collection','Balance','Allias']
      search_fields=['Name']
 
 
