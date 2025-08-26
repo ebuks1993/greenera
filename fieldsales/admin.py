@@ -13,7 +13,7 @@ admin.site.register(rep)
 admin.site.register(Appcall)
 admin.site.register(customer)
 admin.site.register(businessManager)
-admin.site.register(User)
+# admin.site.register(User)
 
 
 
