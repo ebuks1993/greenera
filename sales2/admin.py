@@ -157,7 +157,7 @@ class capacityAdmin(admin.ModelAdmin):
      search_fields=['Name']
 
 
-
+#________________________________________________Accounts Data ________________________________________________________________________________________
 
 
 
@@ -173,7 +173,27 @@ class AccountsUploadAdmin(admin.ModelAdmin):
         file = obj.file
         # file.open("r")  # ensure it's open
         Arecord=pd.read_excel(file)
-        Arecordz=Arecord.fillna(0)
+
+        def clean_dataframe(df: pd.DataFrame) -> pd.DataFrame:
+            # Loop through all object (string) columns
+            for col in df.select_dtypes(include=["object"]).columns:
+                df[col] = (
+                    df[col]
+                    .astype(str)  # make sure it's string
+                    .str.replace(r"_x000D_", "", regex=True)  # remove Excel newline markers
+                    .str.replace(r"nan", '0', regex=True)
+                    .str.replace(",", "", regex=False)
+                    .str.replace(r"\s+", " ", regex=True)  # collapse multiple spaces
+                    .str.strip()  # trim leading/trailing spaces
+                )
+            return df
+        
+        
+        
+        Arec=clean_dataframe(Arecord)
+        areco = Arec.iloc[1:].reset_index(drop=True)
+
+        Arecordz=areco.fillna(0)
         
         Arecordz.columns=['Name','Allias','Parent','Credit_limit']
         Arecordz['Allias']= Arecordz['Allias'].astype('int')
