@@ -20,10 +20,10 @@ class salesAdmin(admin.ModelAdmin):
 
 
 
-    def get_queryset(self, request):
-        qs = super().get_queryset(request)
-        a=qs.filter(uploaded_by=request.user)
-        return a 
+    # def get_queryset(self, request):
+    #     qs = super().get_queryset(request)
+    #     a=qs.filter(uploaded_by=request.user)
+    #     return a 
 
     # def discount(self,obj):
     #     return f"{obj.uploaded_by} -- is a good guy"
