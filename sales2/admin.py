@@ -85,7 +85,7 @@ class salesAdmin(admin.ModelAdmin):
 
 
         with transaction.atomic():
-            SalesRecords2.objects.all().delete()
+            # SalesRecords2.objects.all().delete()
 
             SalesRecords2.objects.bulk_create(
                 unique_objs2,
