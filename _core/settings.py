@@ -50,9 +50,13 @@ INSTALLED_APPS = [
     'whitenoise.runserver_nostatic',
     'rest_framework',
     'corsheaders',
+    "import_export",
     'fieldsales',
     'sales',
     'sales2',
+    'audit',
+    'audit2',
+    "django.contrib.humanize",
      'django_cleanup.apps.CleanupConfig'
 
      

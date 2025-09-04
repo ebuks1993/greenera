@@ -1,8 +1,14 @@
-from django.contrib import admin
+from django.contrib import admin,messages
 from django.db import transaction
 import pandas as pd
+from django.http import HttpRequest
 from datetime import datetime
 import datetime as dt
+from django.db.models.functions import Coalesce
+from django.contrib.humanize.templatetags.humanize import intcomma
+from django.db.models import Subquery, OuterRef ,Value, IntegerField,Q,F, ExpressionWrapper, IntegerField,Sum
+from django.utils.safestring import mark_safe
+from django.db import models
 
 from .models import sales,Customer,Product,SalesRecords,capacityUpload,capacity,Accounts,AccountsUpload,SalesRecords2
 
@@ -155,8 +161,15 @@ class CapacityUploadAdmin(admin.ModelAdmin):
 
 @admin.register(capacity)
 class capacityAdmin(admin.ModelAdmin):
-     list_display=['Name','Sales','collection','Balance','Allias']
+
+     def amount_display(self, obj):
+        return intcomma(obj.Balance)   # 1000000 → 1,000,000
+     amount_display.short_description = "Debt"
+
+     list_display=['Name','Sales','collection','Allias','amount_display']
      search_fields=['Name']
+
+
 
 
 #________________________________________________Accounts Data ________________________________________________________________________________________
@@ -224,11 +237,11 @@ class AccountsUploadAdmin(admin.ModelAdmin):
 
 
 
+
+
+
 @admin.register(Accounts)
 class AccountsAdmin(admin.ModelAdmin):
     list_display=['Name','Allias','Parent','Credit_limit']
     search_fields=['Name']
 
-    
-
-    

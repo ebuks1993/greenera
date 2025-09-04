@@ -12,6 +12,13 @@ class AccountsSerializer (serializers.ModelSerializer):
         fields='__all__'
 
 
+class AccountsSerializer2 (serializers.ModelSerializer): ## conjunction with capacity 
+    debt=serializers.FloatField(read_only=True)
+    sales=serializers.FloatField(read_only=True)
+    class Meta:
+        model=Accounts
+        fields=['Name','Allias','Parent','Credit_limit','debt','sales']
+
 # cred_lim=Accounts.objects.filter(Name=OuterRef('Name')).values("Credit_limit")[:1]
 # accounts=capacity.objects.annotate(
 #     credit_cap=Subquery(cred_lim)
