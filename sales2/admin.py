@@ -10,7 +10,7 @@ from django.db.models import Subquery, OuterRef ,Value, IntegerField,Q,F, Expres
 from django.utils.safestring import mark_safe
 from django.db import models
 
-from .models import sales,Customer,Product,SalesRecords,capacityUpload,capacity,Accounts,AccountsUpload,SalesRecords2
+from .models import sales,Customer,Product,SalesRecords,capacityUpload,capacity,Accounts,AccountsUpload,SalesRecords2,salesStructure
 
 # class salesinline(admin.StackedInline):
 #         model=SalesRecords
@@ -245,3 +245,7 @@ class AccountsAdmin(admin.ModelAdmin):
     list_display=['Name','Allias','Parent','Credit_limit']
     search_fields=['Name']
 
+@admin.register(salesStructure)
+class RegionAdmin(admin.ModelAdmin):
+    list_display=['region','email']
+    # search_fields=['Name']

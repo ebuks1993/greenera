@@ -37,10 +37,11 @@ class capacityView(ModelViewSet):
 
 class accountview2(ModelViewSet):
     def get_queryset(self):
+        qs=Accounts.objects.exclude(Allias=0)
         debt=capacity.objects.filter(Allias=OuterRef("Allias")).values("Balance")[:1]
         sales= capacity.objects.filter(Allias=OuterRef("Allias")).values("Sales")[:1]
 
-        qd=Accounts.objects.all().annotate(debt=Coalesce(Subquery(debt,output_field=IntegerField()),Value(0),output_field=IntegerField())).annotate(sales=Coalesce(Subquery(sales,output_field=IntegerField()),Value(0),output_field=IntegerField()))
+        qd=qs.annotate(debt=Coalesce(Subquery(debt,output_field=IntegerField()),Value(0),output_field=IntegerField())).annotate(sales=Coalesce(Subquery(sales,output_field=IntegerField()),Value(0),output_field=IntegerField()))
 
         return qd
     

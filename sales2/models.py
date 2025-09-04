@@ -57,6 +57,16 @@ class Product(models.Model):
         return self.Name
 
 
+class salesStructure(models.Model):
+    region=(
+        ('WEST','WEST'),
+        ('EAST','EAST'),
+        ('LAGOS','LAGOS'),
+        ('NORTH','NORTH'),
+        ('CONSUMER','CONSUMER'))
+    
+    region =models.CharField(max_length=500, choices=region,null=True)
+    email = models.EmailField( max_length=1254)
 
 
 
