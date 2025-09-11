@@ -63,7 +63,10 @@ class salesStructure(models.Model):
         ('EAST','EAST'),
         ('LAGOS','LAGOS'),
         ('NORTH','NORTH'),
-        ('CONSUMER','CONSUMER'))
+        ('CONSUMER','CONSUMER'),
+        ('OTHERS','OTHERS'),
+        ('DISTRIBUTORS','DISTRIBUTORS'),
+        ('STALLION','STALLION'))
     
     region =models.CharField(max_length=500, choices=region,null=True)
     email = models.EmailField( max_length=1254)
