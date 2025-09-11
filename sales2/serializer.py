@@ -15,6 +15,7 @@ class AccountsSerializer (serializers.ModelSerializer):
 class AccountsSerializer2 (serializers.ModelSerializer): ## conjunction with capacity 
     debt=serializers.FloatField(read_only=True)
     sales=serializers.FloatField(read_only=True)
+    # msales=serializers.FloatField(read_only=True)
     region=serializers.SerializerMethodField()
     channel=serializers.SerializerMethodField()
     overdue=serializers.SerializerMethodField()
@@ -108,6 +109,8 @@ class AccountsSerializer2 (serializers.ModelSerializer): ## conjunction with cap
 
 
 
+
+
 # cred_lim=Accounts.objects.filter(Name=OuterRef('Name')).values("Credit_limit")[:1]
 # accounts=capacity.objects.annotate(
 #     credit_cap=Subquery(cred_lim)
@@ -136,9 +139,58 @@ class salesSerializer (serializers.ModelSerializer):
 
 
 class SalesRecordsSerializer (serializers.ModelSerializer):
+    region=serializers.SerializerMethodField()
+    emails=serializers.SerializerMethodField()
     class Meta:
         model=SalesRecords2
-        fields='__all__'
+        fields=['id','VoucherNum','Date','units','ctns','rate','Amount','temp_region','customer','product','temp_margin','temp_margin2','month','year','company','region','emails']
+
+    def get_region(self, sal:SalesRecords2):
+        ak=['EAST']
+        ag=['WEST']
+        an=["NORTH"]
+        la=['LAGOS']
+        ca=['CONSUMER']
+        ba=['BUSINESS']
+        sta=['STALLION']
+
+        if any(x in sal.temp_region.upper() for x in ak):
+            return "EAST"
+        if any(x in sal.temp_region.upper() for x in ag):
+            return "WEST"
+        if any(x in sal.temp_region.upper() for x in an):
+            return "NORTH"
+        if any(x in sal.temp_region.upper() for x in la):
+            return "LAGOS"
+        if any(x in sal.temp_region.upper() for x in ca):
+            return "CONSUMER"
+        if any(x in sal.temp_region.upper() for x in ba):
+            return "DISTRIBUTORS",
+        if any(x in sal.temp_region.upper() for x in sta):
+            return "STALLION"
+        else:
+            return "OTHERS"
+        
+    def get_emails(self, acct):
+        region = self.get_region(acct)
+
+        # Cache mapping for performance
+        if not hasattr(self, "_region_mapping"):
+            self._region_mapping = {}
+            qs = salesStructure.objects.values("region", "email")
+            for row in qs:
+                reg = row["region"].upper()
+                if reg not in self._region_mapping:
+                    self._region_mapping[reg] = []
+                self._region_mapping[reg].append(row["email"])
+
+        # Get all emails for region as comma-separated string
+        emails = self._region_mapping.get(region.upper(), [])
+        return ", ".join(emails) if emails else "no-email@example.com"  
+
+    
+
+    
 
 class AccountsUploadSerializer (serializers.ModelSerializer):
     class Meta:
