@@ -151,7 +151,7 @@ class SalesRecordsSerializer (serializers.ModelSerializer):
         an=["NORTH"]
         la=['LAGOS']
         ca=['CONSUMER']
-        ba=['BUSINESS']
+        ba=['BUSINESS','NBMA']
         sta=['STALLION']
 
         if any(x in sal.temp_region.upper() for x in ak):
