@@ -62,8 +62,8 @@ class capacityUploadView(ModelViewSet):
     serializer_class=capacityUploadSerializer
 
 class SalesRecordsView(ModelViewSet):
-    queryset=SalesRecords2.objects.filter(ctns__lte=10)
-    # queryset=SalesRecords2.objects.all()
+    # queryset=SalesRecords2.objects.filter(ctns__lte=10)
+    queryset=SalesRecords2.objects.all()
     serializer_class=SalesRecordsSerializer
 
 class salesView(ModelViewSet):
