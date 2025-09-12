@@ -20,7 +20,7 @@ from .models import sales,Customer,Product,SalesRecords,capacityUpload,capacity,
 
 @admin.register(sales)
 class salesAdmin(admin.ModelAdmin):
-    list_display=['id','report_start_date','report_end_date','uploaded_at','file','uploaded_by','company']
+    list_display=['id','report_start_date','report_end_date','uploaded_at','file','uploaded_by','company','upload_time']
     readonly_fields=['uploaded_by']
     
 
@@ -117,7 +117,7 @@ class ProductAdmin(admin.ModelAdmin):
 
 @admin.register(capacityUpload)
 class CapacityUploadAdmin(admin.ModelAdmin):
-    list_display=['id','report_start_date','report_end_date','uploaded_at','file','uploaded_by','company']
+    list_display=['id','report_start_date','report_end_date','uploaded_at','file','uploaded_by','company','upload_time']
     readonly_fields=['uploaded_by']
 
     def save_model(self, request, obj, form, change):
